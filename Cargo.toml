@@ -1,0 +1,14 @@
+[package]
+name = "AdventOfCode2020"
+version = "0.1.0"
+authors = ["Mateusz Kwapich <mateusz@kwapich.it>"]
+edition = "2018"
+
+[dependencies]
+anyhow = "1.0.34"
+scan-rules = "0.2.0"
+
+[[bin]]
+name = "01_report_repair"
+path = "src/01_report_repair.rs"
+
