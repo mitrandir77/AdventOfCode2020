@@ -1,6 +1,6 @@
 use std::io::{self, BufRead};
 
-fn check_slope(lines: &Vec<String>, right: usize, down: usize) -> i32 {
+fn check_slope(lines: &[String], right: usize, down: usize) -> i64 {
     let mut x = 0; // current tobogan position
     let mut tree_count = 0;
     for (line_no, line) in lines.iter().skip(down).enumerate() {
@@ -12,12 +12,19 @@ fn check_slope(lines: &Vec<String>, right: usize, down: usize) -> i32 {
             }
         }
     }
-    return tree_count;
+    tree_count
 }
 
 fn main() {
     let stdin = io::stdin();
 
     let lines: Vec<_> = stdin.lock().lines().map(|x| x.unwrap()).collect();
-    println!("{}", check_slope(&lines, 3, 1));
+    println!(
+        "{}",
+        check_slope(&lines, 1, 1)
+            * check_slope(&lines, 3, 1)
+            * check_slope(&lines, 5, 1)
+            * check_slope(&lines, 7, 1)
+            * check_slope(&lines, 1, 2)
+    );
 }
