@@ -7,6 +7,7 @@ edition = "2018"
 [dependencies]
 anyhow = "1.0.34"
 scan-rules = "0.2.0"
+maplit = "1.0.2"
 multiset = "0.0.5"
 
 [[bin]]
@@ -21,3 +22,7 @@ path = "src/02_password_philosophy.rs"
 [[bin]]
 name = "03_toboggan_trajectory"
 path = "src/03_toboggan_trajectory.rs"
+
+[[bin]]
+name = "04_passport_processing"
+path = "src/04_passport_processing.rs"
