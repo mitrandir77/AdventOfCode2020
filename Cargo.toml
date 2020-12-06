@@ -17,3 +17,7 @@ path = "src/01_report_repair.rs"
 name = "02_password_philosophy"
 path = "src/02_password_philosophy.rs"
 
+
+[[bin]]
+name = "03_toboggan_trajectory"
+path = "src/03_toboggan_trajectory.rs"
