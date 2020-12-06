@@ -8,15 +8,15 @@ fn main() {
     let mut valid_passwords = 0;
     let stdin = io::stdin();
     for line in stdin.lock().lines() {
-        let_scan!(line.unwrap(); (let lower_bound: i32, "-", let upper_bound: i32, " ", let policy_letter: char, ": ", let password: Line<String>));
+        let_scan!(line.unwrap(); (let first_position: usize, "-", let second_position: usize, " ", let policy_letter: char, ": ", let password: Line<String>));
 
         let mut count = 0;
-        for letter in password.chars() {
-            if letter == policy_letter {
+        for (i, letter) in password.chars().enumerate() {
+            if letter == policy_letter && (i + 1 == first_position || i + 1 == second_position) {
                 count += 1;
             }
         }
-        if count <= upper_bound && count >= lower_bound {
+        if count == 1 {
             valid_passwords += 1;
         }
     }
