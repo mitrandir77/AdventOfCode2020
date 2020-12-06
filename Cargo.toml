@@ -9,6 +9,7 @@ anyhow = "1.0.34"
 scan-rules = "0.2.0"
 maplit = "1.0.2"
 multiset = "0.0.5"
+regex = "1.4.2"
 
 [[bin]]
 name = "01_report_repair"
