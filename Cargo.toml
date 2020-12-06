@@ -13,3 +13,7 @@ multiset = "0.0.5"
 name = "01_report_repair"
 path = "src/01_report_repair.rs"
 
+[[bin]]
+name = "02_password_philosophy"
+path = "src/02_password_philosophy.rs"
+
