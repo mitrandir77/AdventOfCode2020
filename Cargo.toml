@@ -27,3 +27,7 @@ path = "src/03_toboggan_trajectory.rs"
 [[bin]]
 name = "04_passport_processing"
 path = "src/04_passport_processing.rs"
+
+[[bin]]
+name = "05_binary_boarding"
+path = "src/05_binary_boarding.rs"
