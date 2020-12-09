@@ -3,7 +3,7 @@
 use std::collections::BTreeSet;
 use std::io::{self, BufRead};
 
-fn run(program: &Vec<(String, i32)>) -> (bool, i32) {
+fn run(program: &[(String, i32)]) -> (bool, i32) {
     let mut acc = 0;
     let mut visited = BTreeSet::new();
     let mut ip: i32 = 0;
