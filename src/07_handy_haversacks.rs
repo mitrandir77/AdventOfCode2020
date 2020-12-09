@@ -12,9 +12,10 @@ use std::collections::{HashMap, HashSet};
 use std::hash::Hash;
 use std::io::{self, BufRead};
 
+type Graph<T> = HashMap<T, Vec<T>>;
 // Inverts graph edges.
-fn invert_graph<T: Eq + Hash + Copy>(graph: &HashMap<T, Vec<T>>) -> HashMap<T, Vec<T>> {
-    let mut inverted_graph: HashMap<T, Vec<T>> = HashMap::new();
+fn invert_graph<T: Eq + Hash + Copy>(graph: &Graph<T>) -> Graph<T> {
+    let mut inverted_graph: Graph<T> = HashMap::new();
     for (src, dsts) in graph.iter() {
         for dst in dsts {
             let mut new_edge = inverted_graph.remove(dst).unwrap_or_default();
@@ -26,7 +27,7 @@ fn invert_graph<T: Eq + Hash + Copy>(graph: &HashMap<T, Vec<T>>) -> HashMap<T, V
 }
 
 // Returns set of visited nodes
-fn dfs<T: Eq + Hash + Copy>(graph: &HashMap<T, Vec<T>>, start: T) -> HashSet<T> {
+fn dfs<T: Eq + Hash + Copy>(graph: &Graph<T>, start: T) -> HashSet<T> {
     let mut stack = vec![start];
     let mut visited = hashset! {start};
 
