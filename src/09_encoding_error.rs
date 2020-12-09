@@ -4,6 +4,7 @@ extern crate scan_rules;
 use std::collections::BTreeSet;
 use std::collections::VecDeque;
 use std::io::{self, BufRead};
+use std::ops::Range;
 
 fn find_invalid_number(numbers: &[i64]) -> Option<i64> {
     // Those two datastructures always store the same elements.
@@ -29,6 +30,25 @@ fn find_invalid_number(numbers: &[i64]) -> Option<i64> {
     }
     None
 }
+fn find_range_that_sums_up_to_n(numbers: &[i64], n: i64) -> Option<Range<usize>> {
+    let mut sum = 0;
+    let (mut beginning, mut end) = (0, 0);
+
+    loop {
+        if sum < n && end <= numbers.len() {
+            sum += numbers[end];
+            end += 1;
+        } else if sum > n && beginning <= numbers.len() && beginning < end {
+            sum -= numbers[beginning];
+            beginning += 1;
+        } else if sum == n {
+            return Some(beginning..end);
+        } else {
+            break;
+        }
+    }
+    None
+}
 
 fn main() {
     let stdin = io::stdin();
@@ -39,4 +59,7 @@ fn main() {
     }
     let invalid_number = find_invalid_number(&numbers).unwrap();
     println!("The invalid number is {}", invalid_number);
+    let weakness_range = &numbers[find_range_that_sums_up_to_n(&numbers, invalid_number).unwrap()];
+    let weakness = weakness_range.iter().min().unwrap() + weakness_range.iter().max().unwrap();
+    println!("The weakness is {}", weakness);
 }
