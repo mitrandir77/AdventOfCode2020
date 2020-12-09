@@ -44,3 +44,7 @@ path = "src/06_custom_customs.rs"
 [[bin]]
 name = "07_handy_haversacks"
 path = "src/07_handy_haversacks.rs"
+
+[[bin]]
+name = "08_handheld_halting"
+path = "src/08_handheld_halting.rs"
