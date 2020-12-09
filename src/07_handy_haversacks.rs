@@ -46,6 +46,22 @@ fn dfs<T: Eq + Hash + Copy>(graph: &Graph<T>, start: T) -> HashSet<T> {
     visited
 }
 
+fn count_bags<T: Eq + Hash + Copy>(graph: &Graph<T>, start: T, cache: &mut HashMap<T, i32>) -> i32 {
+    let edges = graph.get(&start);
+    let mut result = 1;
+
+    if let Some(edges) = edges {
+        for (cnt, edge) in edges {
+            if !cache.contains_key(edge) {
+                let edge_result = count_bags(graph, *edge, cache);
+                cache.insert(*edge, edge_result);
+            }
+            result += cnt * cache.get(edge).unwrap_or(&0);
+        }
+    }
+    result
+}
+
 fn main() -> Result<(), ScanError> {
     let stdin = io::stdin();
     let mut graph: Graph<(&str, &str)> = HashMap::new();
@@ -68,6 +84,10 @@ fn main() -> Result<(), ScanError> {
         "Shiny gold bags can be contained by {} bag colors",
         visited.len()
     );
+
+    let mut cache = HashMap::new();
+    let count = count_bags(&graph, ("shiny", "gold"), &mut cache);
+    println!("Shiny gold bags can contain {} bags", count - 1);
 
     Ok(())
 }
