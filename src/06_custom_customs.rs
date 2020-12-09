@@ -11,7 +11,7 @@ fn main() -> Result<()> {
     for group_answers in buffer.split("\n\n") {
         let mut group_answers_union = HashSet::new();
         let mut maybe_group_answers_product: Option<HashSet<char>> = None;
-        for person_answers in group_answers.split("\n") {
+        for person_answers in group_answers.split('\n') {
             let mut person_answer_set = HashSet::new();
             for answer in person_answers.chars() {
                 group_answers_union.insert(answer);
@@ -25,7 +25,7 @@ fn main() -> Result<()> {
             }
         }
         sum_of_union_counts += group_answers_union.len();
-        sum_of_product_counts += maybe_group_answers_product.unwrap_or(HashSet::new()).len();
+        sum_of_product_counts += maybe_group_answers_product.unwrap_or_default().len();
     }
     println!("Anyone answered yes: {}", sum_of_union_counts);
     println!("Everyone answered yes: {}", sum_of_product_counts);
