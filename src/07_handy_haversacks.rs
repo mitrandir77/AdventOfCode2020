@@ -12,14 +12,14 @@ use std::collections::{HashMap, HashSet};
 use std::hash::Hash;
 use std::io::{self, BufRead};
 
-type Graph<T> = HashMap<T, Vec<T>>;
+type Graph<T> = HashMap<T, Vec<(i32, T)>>;
 // Inverts graph edges.
 fn invert_graph<T: Eq + Hash + Copy>(graph: &Graph<T>) -> Graph<T> {
     let mut inverted_graph: Graph<T> = HashMap::new();
     for (src, dsts) in graph.iter() {
-        for dst in dsts {
+        for (cnt, dst) in dsts {
             let mut new_edge = inverted_graph.remove(dst).unwrap_or_default();
-            new_edge.push(*src);
+            new_edge.push((*cnt, *src));
             inverted_graph.insert(*dst, new_edge);
         }
     }
@@ -35,7 +35,7 @@ fn dfs<T: Eq + Hash + Copy>(graph: &Graph<T>, start: T) -> HashSet<T> {
         let edges = graph.get(&node);
 
         if let Some(edges) = edges {
-            for edge in edges {
+            for (_cnt, edge) in edges {
                 if !visited.contains(edge) {
                     visited.insert(*edge);
                     stack.push(*edge);
@@ -48,13 +48,13 @@ fn dfs<T: Eq + Hash + Copy>(graph: &Graph<T>, start: T) -> HashSet<T> {
 
 fn main() -> Result<(), ScanError> {
     let stdin = io::stdin();
-    let mut graph: HashMap<(&str, &str), Vec<(&str, &str)>> = HashMap::new();
+    let mut graph: Graph<(&str, &str)> = HashMap::new();
     let lines: Vec<_> = stdin.lock().lines().map(|x| x.unwrap()).collect();
     let iter = lines.iter();
     for line in iter {
         (scan! {line;
             (let sub_adj: Word, let sub_clr: Word , " bags contain ", [let num: i32, let adj: Word, let clr: Word, let bags <| re_str(r"bag(s)?")], +, ".") => {
-                graph.insert((sub_adj, sub_clr), adj.into_iter().zip(clr).collect());
+                graph.insert((sub_adj, sub_clr), num.into_iter().zip(adj.into_iter().zip(clr)).collect());
             },
             (let adj: Word, let clr: Word , " bags contain no other bags.") => (),
         })?;
