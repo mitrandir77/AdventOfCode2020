@@ -52,3 +52,7 @@ path = "src/08_handheld_halting.rs"
 [[bin]]
 name = "09_encoding_error"
 path = "src/09_encoding_error.rs"
+
+[[bin]]
+name = "10_adapter_array"
+path = "src/10_adapter_array.rs"
