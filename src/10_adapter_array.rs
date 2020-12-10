@@ -27,4 +27,20 @@ fn main() {
         }
     }
     println!("numbers of 1's times number of 3's: {}", ones * threes);
+    let mut combinations = vec![0 as i64; (*numbers.last().unwrap() + 1) as usize];
+
+    combinations[0] = 1;
+    for n in &numbers[1..numbers.len()] {
+        combinations[*n as usize] += combinations[(n - 1) as usize];
+        if n - 2 >= 0 {
+            combinations[*n as usize] += combinations[(n - 2) as usize];
+        }
+        if n - 3 >= 0 {
+            combinations[*n as usize] += combinations[(n - 3) as usize];
+        }
+    }
+    println!(
+        "Number of possible adapter arrangements: {}",
+        combinations.last().unwrap()
+    );
 }
