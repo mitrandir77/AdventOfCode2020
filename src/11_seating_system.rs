@@ -9,31 +9,43 @@ enum PositionState {
     OccupiedSeat,
 }
 
-fn adjacent_seats(height: usize, width: usize, i: usize, j: usize) -> Vec<(usize, usize)> {
-    let mut res = vec![];
-    let (i, j, width, height) = (i as isize, j as isize, width as isize, height as isize);
-    for ii in i - 1..=i + 1 {
-        for jj in j - 1..=j + 1 {
-            if jj < width && ii < height && jj >= 0 && ii >= 0 && (ii != i || jj != j) {
-                res.push((ii as usize, jj as usize));
-            }
-        }
-    }
-    res
-}
-
-fn count_adjacent(
+fn count_visible_occupied(
     seating_layout: &[Vec<PositionState>],
     height: usize,
     width: usize,
-    i: usize,
-    j: usize,
-    count_state: PositionState,
+    x: usize,
+    y: usize,
 ) -> usize {
     let mut counter = 0;
-    for (ii, jj) in adjacent_seats(height, width, i, j) {
-        if seating_layout[ii][jj] == count_state {
-            counter += 1;
+    let (x, y, height, width) = (x as isize, y as isize, height as isize, width as isize);
+
+    let directions = [
+        (-1, -1),
+        (-1, 0),
+        (-1, 1),
+        (0, -1),
+        (0, 1),
+        (1, -1),
+        (1, 0),
+        (1, 1),
+    ];
+
+    for direction in &directions {
+        let mut xx = x;
+        let mut yy = y;
+        loop {
+            xx += direction.0;
+            yy += direction.1;
+            if xx < 0 || yy < 0 || xx >= height || yy >= width {
+                break;
+            }
+            if seating_layout[xx as usize][yy as usize] == PositionState::EmptySeat {
+                break;
+            }
+            if seating_layout[xx as usize][yy as usize] == PositionState::OccupiedSeat {
+                counter += 1;
+                break;
+            }
         }
     }
     counter
@@ -82,15 +94,7 @@ fn main() {
                 let new_state = match cur_layout[i][j] {
                     PositionState::Floor => PositionState::Floor,
                     PositionState::EmptySeat => {
-                        if count_adjacent(
-                            &cur_layout,
-                            height,
-                            width,
-                            i,
-                            j,
-                            PositionState::OccupiedSeat,
-                        ) == 0
-                        {
+                        if count_visible_occupied(&cur_layout, height, width, i, j) == 0 {
                             change_flag = true;
                             PositionState::OccupiedSeat
                         } else {
@@ -98,15 +102,7 @@ fn main() {
                         }
                     }
                     PositionState::OccupiedSeat => {
-                        if count_adjacent(
-                            &cur_layout,
-                            height,
-                            width,
-                            i,
-                            j,
-                            PositionState::OccupiedSeat,
-                        ) >= 4
-                        {
+                        if count_visible_occupied(&cur_layout, height, width, i, j) >= 5 {
                             change_flag = true;
                             PositionState::EmptySeat
                         } else {
