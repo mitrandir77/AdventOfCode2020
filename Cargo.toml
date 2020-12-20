@@ -60,3 +60,7 @@ path = "src/10_adapter_array.rs"
 [[bin]]
 name = "11_seating_system"
 path = "src/11_seating_system.rs"
+
+[[bin]]
+name = "12_rain_risk"
+path = "src/12_rain_risk.rs"
