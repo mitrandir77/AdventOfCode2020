@@ -27,7 +27,7 @@ fn main() {
         }
     }
     println!("numbers of 1's times number of 3's: {}", ones * threes);
-    let mut combinations = vec![0 as i64; (*numbers.last().unwrap() + 1) as usize];
+    let mut combinations = vec![0_i64; (*numbers.last().unwrap() + 1) as usize];
 
     combinations[0] = 1;
     for n in &numbers[1..numbers.len()] {

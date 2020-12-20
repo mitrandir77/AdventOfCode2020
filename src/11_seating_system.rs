@@ -62,7 +62,7 @@ fn print_layout(layout: &[Vec<PositionState>]) {
             };
             print!("{}", letter);
         }
-        println!("");
+        println!();
     }
 }
 
