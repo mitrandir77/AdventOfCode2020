@@ -64,3 +64,6 @@ path = "src/11_seating_system.rs"
 [[bin]]
 name = "12_rain_risk"
 path = "src/12_rain_risk.rs"
+
+[features]
+part_two = []
