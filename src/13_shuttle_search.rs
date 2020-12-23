@@ -5,15 +5,15 @@ use std::io::{self, BufRead};
 fn main() {
     let stdin = io::stdin();
     let lines: Vec<_> = stdin.lock().lines().collect();
-    let_scan!(lines.get(0).unwrap().as_ref().unwrap(); (let timestamp:i32));
+    let_scan!(lines.get(0).unwrap().as_ref().unwrap(); (let timestamp:i64));
     let mut ids = vec![];
     for bus_str in lines.get(1).unwrap().as_ref().unwrap().split(',') {
-        ids.push(bus_str.parse::<i32>().ok());
+        ids.push(bus_str.parse::<i64>().ok());
     }
 
     #[cfg(not(feature = "part_two"))]
     {
-        let mut min = i32::MAX;
+        let mut min = i64::MAX;
         let mut min_id = 0;
         for bus_id in ids {
             if let Some(bus_id) = bus_id {
@@ -32,6 +32,25 @@ fn main() {
     }
     #[cfg(feature = "part_two")]
     {
-
+        use modinverse::egcd;
+        use std::cmp::min;
+        let mut prod = 1;
+        let mut x = 0;
+        for bus_id in ids.iter() {
+            if let Some(bus_id) = bus_id {
+                prod *= bus_id;
+            }
+        }
+        for (n, bus_id) in ids.iter().enumerate() {
+            let n = n as i64;
+            if let Some(bus_id) = bus_id {
+                let m = prod / bus_id;
+                // f * m + g * bus_id = 1
+                let (_d, _f, g) = egcd(*bus_id, m);
+                x += n * g * m;
+            }
+        }
+        let res = x + prod * (1 - x / prod);
+        println!("{}", min(res, (res - prod).abs()));
     }
 }
