@@ -70,5 +70,9 @@ path = "src/12_rain_risk.rs"
 name = "13_shuttle_search"
 path = "src/13_shuttle_search.rs"
 
+[[bin]]
+name = "14_docking_data"
+path = "src/14_docking_data.rs"
+
 [features]
 part_two = []
