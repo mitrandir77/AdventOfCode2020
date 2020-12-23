@@ -2,7 +2,7 @@
 extern crate scan_rules;
 
 use scan_rules::scanner::Word;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::io::{self, BufRead};
 
 enum Ins {
@@ -14,8 +14,6 @@ enum Ins {
     },
 }
 
-const THIRTY_SIX_BITS: u64 = 68719476735;
-
 fn parse_mask(mask: &str) -> Ins {
     Ins::Mask((
         u64::from_str_radix(mask.replace("X", "0").as_str(), 2).unwrap(),
@@ -23,9 +21,37 @@ fn parse_mask(mask: &str) -> Ins {
     ))
 }
 
+#[cfg(not(feature = "part_two"))]
 fn apply_mask(val: u64, mask: (u64, u64)) -> u64 {
+    const THIRTY_SIX_BITS: u64 = 68719476735;
+
     let (ones, zeroes) = mask;
     (val | ones) & zeroes & THIRTY_SIX_BITS
+}
+
+#[cfg(feature = "part_two")]
+fn apply_addr_mask(addr: u64, mask: (u64, u64)) -> HashSet<u64> {
+    let (ones, zeroes) = mask;
+    let ones_applied = addr | ones;
+
+    let xs = ones ^ zeroes;
+
+    let mut res = HashSet::new();
+    res.insert(ones_applied);
+    let mut bit = 1;
+    for _ in 0..36 {
+        if bit & xs > 0 {
+            let mut to_add = vec![];
+            for entry in res.iter() {
+                to_add.push(entry | bit);
+                to_add.push(entry & (!bit));
+            }
+            res.extend(to_add.into_iter());
+        }
+
+        bit <<= 1;
+    }
+    res
 }
 
 fn main() {
@@ -43,11 +69,27 @@ fn main() {
 
     let mut mem = HashMap::new();
     let mut mask = (0, 0);
-    for ins in program {
-        match ins {
-            Ins::Mask(new_mask) => mask = new_mask,
-            Ins::Ass { addr, val } => {
-                let _ = mem.insert(addr, apply_mask(val, mask));
+    #[cfg(not(feature = "part_two"))]
+    {
+        for ins in program {
+            match ins {
+                Ins::Mask(new_mask) => mask = new_mask,
+                Ins::Ass { addr, val } => {
+                    let _ = mem.insert(addr, apply_mask(val, mask));
+                }
+            }
+        }
+    }
+    #[cfg(feature = "part_two")]
+    {
+        for ins in program {
+            match ins {
+                Ins::Mask(new_mask) => mask = new_mask,
+                Ins::Ass { addr, val } => {
+                    for addr in apply_addr_mask(addr, mask) {
+                        mem.insert(addr, val);
+                    }
+                }
             }
         }
     }
