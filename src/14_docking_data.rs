@@ -2,7 +2,7 @@
 extern crate scan_rules;
 
 use scan_rules::scanner::Word;
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 use std::io::{self, BufRead};
 
 enum Ins {
@@ -31,6 +31,7 @@ fn apply_mask(val: u64, mask: (u64, u64)) -> u64 {
 
 #[cfg(feature = "part_two")]
 fn apply_addr_mask(addr: u64, mask: (u64, u64)) -> HashSet<u64> {
+    use std::collections::HashSet;
     let (ones, zeroes) = mask;
     let ones_applied = addr | ones;
 
