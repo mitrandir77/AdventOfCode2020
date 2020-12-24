@@ -74,5 +74,9 @@ path = "src/13_shuttle_search.rs"
 name = "14_docking_data"
 path = "src/14_docking_data.rs"
 
+[[bin]]
+name = "15_rambunctious_recitation"
+path = "src/15_rambunctious_recitation.rs"
+
 [features]
 part_two = []
